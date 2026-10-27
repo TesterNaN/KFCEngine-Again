@@ -181,8 +181,8 @@ namespace KidFansChannel.VideoCore
 				return;
 			}
 			EventCode eventCode = default(EventCode);
-			IntPtr eventParam1 = default(IntPtr);
-			IntPtr eventParam2 = default(IntPtr);
+			int eventParam1 = 0;
+			int eventParam2 = 0;
 			while (eventEx.GetEvent(out eventCode, out eventParam1, out eventParam2, 0) == 0)
 			{
 				eventEx.FreeEventParams(eventCode, eventParam1, eventParam2);
