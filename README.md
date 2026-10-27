@@ -122,7 +122,7 @@ msbuild Again.csproj /t:Rebuild
 
 依赖都在 `deps/`，不需要另外下载。
 
-产物：`bin\Release\Again.exe`（528 KB）。比原始 2.6 MB 小，因为**嵌入的游戏资源没有打包进来**（见 `src/RESOURCES-NOTE.md`）。
+产物：`bin\Release\Again.exe`（2.4 MB）。
 
 `deps\` 里的依赖：
 
