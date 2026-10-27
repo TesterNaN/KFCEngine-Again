@@ -122,10 +122,6 @@ msbuild Again.csproj /t:Rebuild
 
 依赖都在 `deps/`，不需要另外下载。
 
-`DirectShowLib-2005.dll` 是 **1.5.0.0** —— 原始程序集引用的就是这个版本，
-源码也按它的签名写（`IMediaEventEx.GetEvent` 的 `lParam1`、`lParam2` 是 `int`）。
-2.0 起这两个参数改成了 `IntPtr`，与本仓库的源码不匹配。
-
 产物：`bin\Release\Again.exe`（528 KB）。比原始 2.6 MB 小，因为**嵌入的游戏资源没有打包进来**（见 `src/RESOURCES-NOTE.md`）。
 
 `deps\` 里的依赖：
@@ -137,7 +133,7 @@ msbuild Again.csproj /t:Rebuild
 | `Microsoft.DirectX.Direct3DX.dll` | **1.0.2911** | 与原始程序集引用的版本一致 |
 | `Microsoft.DirectX.DirectInput.dll` | 1.0.2902 | 输入 |
 | `Microsoft.DirectX.DirectSound.dll` | 1.0.2902 | 音频 |
-| `DirectShowLib.dll` | 1.5 / 2.1 | 视频播放（v2 把 v1 的 MCI 换成了 DirectShow） |
+| `DirectShowLib-2005.dll` | 1.5.0.0 | 视频播放 |
 
 这些是 .NET 2.0 时代的 Managed DirectX，原本装在
 `C:\Windows\Microsoft.NET\DirectX for Managed Code\` 下。
