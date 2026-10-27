@@ -120,6 +120,17 @@ SHA256  2FA08AA3E02F0A701103B577160F418F80AFB9FD37BC27B141EB1DEBC89462EC
 msbuild Again.csproj /t:Rebuild
 ```
 
+依赖都在 `deps/`，不需要另外下载：
+
+| 文件 | 版本 | 用途 |
+|---|---|---|
+| `deps/DirectShowLib-2005.dll` | 2.0.0.0 | 编译本仓库的源码 |
+| `deps/legacy/DirectShowLib-2005.dll` | 1.5.0.0 | 运行原版程序集时用这个 |
+
+两个版本不能互换。2.0 把 `IMediaEventEx.GetEvent` / `FreeEventParams` 的
+`lParam1`、`lParam2` 从 `int` 改成了 `IntPtr`，1.5 是原版程序集编译时对着的形状。
+反编译出来的源码按 2.0 写的，所以编译用 2.0；原版程序集按 1.5 编译，所以运行时用 1.5。
+
 产物：`bin\Release\Again.exe`（528 KB）。比原始 2.6 MB 小，因为**嵌入的游戏资源没有打包进来**（见 `src/RESOURCES-NOTE.md`）。
 
 `deps\` 里的依赖：
