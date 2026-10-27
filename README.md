@@ -204,6 +204,41 @@ Again ──► GalCore ──► GameCore ──► Game2DCore ──► Direct
 
 ---
 
+## 程序集怎么取出来的
+
+`Again.exe` 是原生启动器套 StarForce FrontLine 5。.NET 程序集不在代码段里，
+而是作为 PE 资源配置整块嵌入，加密存放：
+
+| 资源类型 | ID | 大小 | 内容 |
+|---|---|---|---|
+| `IDR_ASSEMBLY` | 110 | 2,686,472 字节 | 加密的 `Again.Managed.exe` |
+| `IDR_ASSEMBLY` | 111 | 16,384 字节 | `Invoke.dll`，明文 |
+
+程序集在资源表里，而资源表本身是明文可解析的 —— StarForce 保护的是启动器主体，
+读取资源这一步不经过壳的解密逻辑，所以不需要处理 StarForce 的驱动或虚拟光驱检测。
+
+### 解密参数
+
+`Invoke.dll` 是加载器，入口 `StartProgram(byte[] prog, string pwd, string[] args)`
+把参数写全了：
+
+```csharp
+string text = "KID Fans Channel";     // 3DES 密钥，补零到 24 字节
+byte[] iv = pwd 的前 8 字节;           // pwd = "Again"
+TripleDESCryptoServiceProvider.CreateDecryptor(key, iv);
+```
+
+### 步骤
+
+1. 解析 `Again.exe` 的 PE 资源表，定位 `IDR_ASSEMBLY` id=110
+2. 取出该资源，位于文件偏移 437,856，长度 2,686,472 字节
+3. 3DES-CBC 解密：key 取 `"KID Fans Channel"` 补零到 24 字节，
+   IV 取 `"Again"` 补零到 8 字节
+4. 明文长度是密文长度减 8
+5. 结果以 `MZ` 开头，即 `Again.Managed.exe`
+
+---
+
 ## 版权
 
 - 《Memories Off ～それから～ Again》原作 © KID Corp.
